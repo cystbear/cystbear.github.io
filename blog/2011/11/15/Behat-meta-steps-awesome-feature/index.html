@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Octopress Blog</title>
+  <title>Behat Meta Steps Awesome Feature - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="Hello guys, let me show you how to prepare Behat meta step. For example, you need start each your scenario form one entry point &ndash; logged in as &hellip;">
+  <meta name="description" content="Behat Meta Steps Awesome Feature Hello guys, let me show you how to prepare Behat meta step. For example, you need start each your scenario form one &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cystbear.github.io">
+  <link rel="canonical" href="http://cystbear.github.io/blog/2011/11/15/Behat-meta-steps-awesome-feature">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -63,18 +63,89 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article role="article">
   
-  
-  
-    <article>
-      
   <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/11/15/Behat-meta-steps-awesome-feature/">Behat Meta Steps Awesome Feature</a></h1>
-    
-    
+    <h1 class="entry-title">Behat Meta Steps Awesome Feature</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-15T00:00:00+02:00" pubdate data-updated="true"></time></p>
+  </header>
+  
+  <p>Hello guys, let me show you how to prepare Behat meta step.</p>
+
+<p>For example, you need start each your scenario form one entry point &ndash; logged in as specific user and located at homepage.</p>
+
+<!-- more -->
+
+
+<p>In this case you will need start each your scenario like this:</p>
+
+<div><script src='https://gist.github.com/1371256.js?file=myScenario.feature'></script>
+<noscript><pre><code>Scenario: Test my feature
+  Given I am on &quot;/login&quot;
+  When I fill in &quot;Username&quot; with &quot;admin&quot;
+  And I fill in &quot;Password&quot; with &quot;admin&quot;
+  And I press &quot;Login&quot;
+  And I should be on &quot;/home&quot;
+  And I go to &quot;/feature-page&quot; # your start your real steps here
+  And ...
+  And ...
+  Then ...
+  And ...
+  And ...</code></pre></noscript></div>
+
+
+<p>Let`s hide all login steps to meta step.</p>
+
+<p>Add to your FeatureContext</p>
+
+<div><script src='https://gist.github.com/1371256.js?file=FeatureContext.php'></script>
+<noscript><pre><code>&lt;?php
+
+/**
+ * @Given /^I logged in as &quot;([^&quot;]*)&quot; with &quot;([^&quot;]*)&quot; password$/
+ */
+public function iLoggedInAsWithPassword($username, $password)
+{
+   return array(
+       new Step\Given(&quot;I am on \&quot;/login\&quot;&quot;),
+       new Step\When(&quot;I fill in \&quot;Username\&quot; with \&quot;$username\&quot;&quot;),
+       new Step\When(&quot;I fill in \&quot;Password\&quot; with \&quot;$password\&quot;&quot;),
+       new Step\When(&quot;I press \&quot;Login\&quot;&quot;),
+       new Step\Then(&quot;I should be on \&quot;/home\&quot;&quot;),
+   );
+}</code></pre></noscript></div>
+
+
+<p>now you can use it at your feature definition.</p>
+
+<div><script src='https://gist.github.com/1371256.js?file=myScenarioImproved.feature'></script>
+<noscript><pre><code>Scenario: Test my feature
+  Given I logged in as &quot;admin&quot; with &quot;admin&quot; password
+  When I go to &quot;/feature-page&quot; # your start your real steps here
+  And ...
+  Then ...
+  And ...</code></pre></noscript></div>
+
+
+<p>Much better now!</p>
+
+  
+    <footer>
       <p class="meta">
+        
         
 
 
@@ -89,32 +160,25 @@
 
 <time datetime="2011-11-15T00:00:00+02:00" pubdate data-updated="true"></time>
         
+
+
       </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Hello guys, let me show you how to prepare Behat meta step.</p>
-
-<p>For example, you need start each your scenario form one entry point &ndash; logged in as specific user and located at homepage.</p>
-
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cystbear.github.io/blog/2011/11/15/Behat-meta-steps-awesome-feature/" data-via="" data-counturl="http://cystbear.github.io/blog/2011/11/15/Behat-meta-steps-awesome-feature/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/11/15/Behat-meta-steps-awesome-feature/">Read on &rarr;</a>
+
+      
     </footer>
   
+</article>
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -134,6 +198,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

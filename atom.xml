@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[My Octopress Blog]]></title>
+  <link href="http://cystbear.github.io/atom.xml" rel="self"/>
+  <link href="http://cystbear.github.io/"/>
+  <updated>2014-01-06T13:38:22+02:00</updated>
+  <id>http://cystbear.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Behat Meta Steps Awesome Feature]]></title>
+    <link href="http://cystbear.github.io/blog/2011/11/15/Behat-meta-steps-awesome-feature/"/>
+    <updated>2011-11-15T00:00:00+02:00</updated>
+    <id>http://cystbear.github.io/blog/2011/11/15/Behat-meta-steps-awesome-feature</id>
+    <content type="html"><![CDATA[<p>Hello guys, let me show you how to prepare Behat meta step.</p>
+
+<p>For example, you need start each your scenario form one entry point &ndash; logged in as specific user and located at homepage.</p>
+
+<!-- more -->
+
+
+<p>In this case you will need start each your scenario like this:</p>
+
+<div><script src='https://gist.github.com/1371256.js?file=myScenario.feature'></script>
+<noscript><pre><code>Scenario: Test my feature
+  Given I am on &quot;/login&quot;
+  When I fill in &quot;Username&quot; with &quot;admin&quot;
+  And I fill in &quot;Password&quot; with &quot;admin&quot;
+  And I press &quot;Login&quot;
+  And I should be on &quot;/home&quot;
+  And I go to &quot;/feature-page&quot; # your start your real steps here
+  And ...
+  And ...
+  Then ...
+  And ...
+  And ...</code></pre></noscript></div>
+
+
+<p>Let`s hide all login steps to meta step.</p>
+
+<p>Add to your FeatureContext</p>
+
+<div><script src='https://gist.github.com/1371256.js?file=FeatureContext.php'></script>
+<noscript><pre><code>&lt;?php
+
+/**
+ * @Given /^I logged in as &quot;([^&quot;]*)&quot; with &quot;([^&quot;]*)&quot; password$/
+ */
+public function iLoggedInAsWithPassword($username, $password)
+{
+   return array(
+       new Step\Given(&quot;I am on \&quot;/login\&quot;&quot;),
+       new Step\When(&quot;I fill in \&quot;Username\&quot; with \&quot;$username\&quot;&quot;),
+       new Step\When(&quot;I fill in \&quot;Password\&quot; with \&quot;$password\&quot;&quot;),
+       new Step\When(&quot;I press \&quot;Login\&quot;&quot;),
+       new Step\Then(&quot;I should be on \&quot;/home\&quot;&quot;),
+   );
+}</code></pre></noscript></div>
+
+
+<p>now you can use it at your feature definition.</p>
+
+<div><script src='https://gist.github.com/1371256.js?file=myScenarioImproved.feature'></script>
+<noscript><pre><code>Scenario: Test my feature
+  Given I logged in as &quot;admin&quot; with &quot;admin&quot; password
+  When I go to &quot;/feature-page&quot; # your start your real steps here
+  And ...
+  Then ...
+  And ...</code></pre></noscript></div>
+
+
+<p>Much better now!</p>
+]]></content>
+  </entry>
+  
+</feed>
